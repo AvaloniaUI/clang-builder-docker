@@ -57,4 +57,4 @@ RUN ln -s /sysroots/aarch64-linux-gnu/usr/lib/linux/clang_rt.crtbegin-aarch64.o 
     /usr/lib/llvm-20/lib/clang/20/lib/aarch64-unknown-linux-gnu/clang_rt.crtbegin.o
 RUN ln -s /sysroots/aarch64-linux-gnu/usr/lib/linux/clang_rt.crtend-aarch64.o \
     /usr/lib/llvm-20/lib/clang/20/lib/aarch64-unknown-linux-gnu/clang_rt.crtend.o
-
+COPY toolchains /toolchains
