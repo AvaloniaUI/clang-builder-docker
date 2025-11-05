@@ -34,7 +34,7 @@ RUN /scripts/build-sysroot.sh
 
 FROM silkeh/clang:20-bookworm
 
-RUN apt-get update && apt-get install -y --no-install-recommends git ninja-build pax-utils  && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git ninja-build pax-utils strace && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 # glibc x86_64
 COPY --from=baseroot-x86_64 . /sysroots/x86_64-linux-gnu
@@ -52,4 +52,4 @@ COPY toolchains /toolchains
 RUN rm /usr/bin/ld && ln -s /usr/bin/ld.lld /usr/bin/ld
 
 RUN /scripts/install_clang_builtins.sh && /scripts/check-compile.sh && rm -rf /scripts
-
+COPY scripts/dist /scripts

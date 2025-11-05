@@ -36,6 +36,7 @@ run_script() {
       -DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON \
       -DLIBCXX_ENABLE_SHARED=OFF \
       -DLIBCXXABI_ENABLE_SHARED=OFF \
+      -DLIBCXXABI_USE_LLVM_UNWINDER=YES \
       -DLIBUNWIND_ENABLE_SHARED=OFF \
       -DCMAKE_C_COMPILER_WORKS=1 \
       -DCMAKE_CXX_COMPILER_WORKS=1 \
@@ -61,6 +62,9 @@ run_script() {
 
   # Create a fake libgcc_s.a to satisfy the linker
   ar -r "$INSTALL_PATH/usr/lib/libgcc_s.a"
+  ln -s $INSTALL_PATH/usr/lib/linux/clang_rt.crtbegin*.o $INSTALL_PATH/usr/lib/crtbeginS.o
+  ln -s $INSTALL_PATH/usr/lib/linux/clang_rt.crtend*.o $INSTALL_PATH/usr/lib/crtendS.o
+  symlinks -cr $INSTALL_PATH
 }
 
 # Invoke run_targets with the provided argument

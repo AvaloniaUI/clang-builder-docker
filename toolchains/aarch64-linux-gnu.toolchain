@@ -1,7 +1,11 @@
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR aarch64)
 
-set(CMAKE_SYSROOT /sysroots/aarch64-linux-gnu)
+# replace fixed sysroot with one relative to this toolchain file
+get_filename_component(TOOLCHAIN_DIR "${CMAKE_CURRENT_LIST_DIR}" ABSOLUTE)
+set(SYSROOT_DIR "${TOOLCHAIN_DIR}/../sysroots/aarch64-linux-gnu")
+get_filename_component(SYSROOT_DIR "${SYSROOT_DIR}" REALPATH)
+set(CMAKE_SYSROOT "${SYSROOT_DIR}")
 
 set(CMAKE_C_COMPILER /usr/bin/clang)
 set(CMAKE_CXX_COMPILER /usr/bin/clang++)

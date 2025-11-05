@@ -15,8 +15,8 @@ run_script() {
   
   mkdir -p $CLANG_LIBRARY_DIR
   ln -s $SRC_DIR/libclang_rt.builtins-*.a $CLANG_LIBRARY_DIR/libclang_rt.builtins.a
-  ln -s $SRC_DIR/clang_rt.crtbegin-*.o $CLANG_LIBRARY_DIR/clang_rt.crtbegin.o
-  ln -s $SRC_DIR/clang_rt.crtend-*.o $CLANG_LIBRARY_DIR/clang_rt.crtend.o
+  #ln -s $SRC_DIR/clang_rt.crtbegin-*.o $CLANG_LIBRARY_DIR/clang_rt.crtbegin.o
+  #ln -s $SRC_DIR/clang_rt.crtend-*.o $CLANG_LIBRARY_DIR/clang_rt.crtend.o
 }
 
 run_targets "$1" 
