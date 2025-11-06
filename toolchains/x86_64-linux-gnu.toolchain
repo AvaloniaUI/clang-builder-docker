@@ -7,16 +7,16 @@ set(SYSROOT_DIR "${TOOLCHAIN_DIR}/../sysroots/x86_64-linux-gnu")
 get_filename_component(SYSROOT_DIR "${SYSROOT_DIR}" REALPATH)
 set(CMAKE_SYSROOT "${SYSROOT_DIR}")
 
-set(CMAKE_C_COMPILER /usr/bin/clang)
-set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-set(CMAKE_ASM_COMPILER /usr/bin/clang)
+set(CMAKE_C_COMPILER /usr/bin/clang-20)
+set(CMAKE_CXX_COMPILER /usr/bin/clang++-20)
+set(CMAKE_ASM_COMPILER /usr/bin/clang-20)
 
 set(CMAKE_C_COMPILER_TARGET x86_64-linux-gnu)
 set(CMAKE_CXX_COMPILER_TARGET x86_64-linux-gnu)
 set(CMAKE_ASM_COMPILER_TARGET x86_64-linux-gnu)
 
-set(CMAKE_C_FLAGS_INIT "-rtlib=compiler-rt")
-set(CMAKE_CXX_FLAGS_INIT "-rtlib=compiler-rt -stdlib=libc++")
+set(CMAKE_C_FLAGS_INIT "")
+set(CMAKE_CXX_FLAGS_INIT "-stdlib=libc++")
 
 set(LINKER_FLAGS "-stdlib=libc++ -rtlib=compiler-rt -fuse-ld=lld -lc++ -lc++abi -lunwind -lm -lc")
 set(CMAKE_EXE_LINKER_FLAGS_INIT "${LINKER_FLAGS}")

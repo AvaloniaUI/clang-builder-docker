@@ -41,6 +41,11 @@ This repository contains the source and build recipes for a universal Docker ima
       -DCMAKE_TOOLCHAIN_FILE=/toolchains/aarch64-linux-gnu.toolchain \
     ```
 
+## Extracting sysroots and toolchains
+
+If you need to use your system toolchain for some reason (e. g. CLion insists on using debugger from the same docker container that was used to build the project), you can extract the sysroots and toolchain files from the image:
+
+`docker run --rm -v "$(pwd)"/toolchains:/host clang-builder /scripts/extract-toolchain.sh`
 
 ## Notes and constraints
 - GCC, libgcc and GCC-provided runtimes are intentionally not used anywhere. Runtimes come from compiler-rt, libc++/libc++abi and libunwind built with Clang and are statically linked

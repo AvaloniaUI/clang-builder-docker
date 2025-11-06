@@ -7,9 +7,9 @@ set(SYSROOT_DIR "${TOOLCHAIN_DIR}/../sysroots/aarch64-linux-gnu")
 get_filename_component(SYSROOT_DIR "${SYSROOT_DIR}" REALPATH)
 set(CMAKE_SYSROOT "${SYSROOT_DIR}")
 
-set(CMAKE_C_COMPILER /usr/bin/clang)
-set(CMAKE_CXX_COMPILER /usr/bin/clang++)
-set(CMAKE_ASM_COMPILER /usr/bin/clang)
+set(CMAKE_C_COMPILER /usr/bin/clang-20)
+set(CMAKE_CXX_COMPILER /usr/bin/clang++-20)
+set(CMAKE_ASM_COMPILER /usr/bin/clang-20)
 
 set(CMAKE_C_COMPILER_TARGET aarch64-linux-gnu)
 set(CMAKE_CXX_COMPILER_TARGET aarch64-linux-gnu)
