@@ -9,7 +9,7 @@ run_script() {
 
   SYSROOT_PATH="/sysroots/${TARGET_TRIPLE}"
   BUILDDIR=/build/$TARGET_TRIPLE
-  INSTALL_PATH=/out/$TARGET_TRIPLE
+  INSTALL_PATH=$SYSROOT_PATH
   COMPILE_FLAGS="--target=${TARGET_TRIPLE} -fPIC"
 
   mkdir -p "$BUILDDIR"
@@ -65,7 +65,13 @@ run_script() {
   ln -s $INSTALL_PATH/usr/lib/linux/clang_rt.crtbegin*.o $INSTALL_PATH/usr/lib/crtbeginS.o
   ln -s $INSTALL_PATH/usr/lib/linux/clang_rt.crtend*.o $INSTALL_PATH/usr/lib/crtendS.o
   symlinks -cr $INSTALL_PATH
+  
+  # Verify that sysroot works
+  /scripts/install_clang_builtins.sh $TARGET_TRIPLE
+  /scripts/check-compile.sh $TARGET_TRIPLE
+
 }
+
 
 # Invoke run_targets with the provided argument
 run_targets "$1"

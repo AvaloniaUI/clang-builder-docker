@@ -1,4 +1,4 @@
-B_TARGETS=(aarch64-linux-gnu x86_64-linux-gnu)
+B_TARGETS=(aarch64-linux-gnu arm-linux-gnueabihf x86_64-linux-gnu)
 
 
 run_targets() {
