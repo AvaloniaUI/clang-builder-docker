@@ -1,8 +1,8 @@
 # CLang portable cross-toolchain
 
 This repository contains the source and build recipes for a universal Docker image that provides:
-- Clang 20 toolchain (based on https://github.com/silkeh/docker-clang image)
-- libc++ (C++ standard library), libunwind and compiler-rt from LLVM 20 built from source
+- Clang 21 toolchain
+- libc++ (C++ standard library), libunwind and compiler-rt from LLVM 21 built from source
 - Compiler-rt / libunwind as needed 
 - Sysroots for cross-compilation:
   - aarch64 glibc (Debian 11)
@@ -10,12 +10,12 @@ This repository contains the source and build recipes for a universal Docker ima
   - TBD
 
 ## Purpose
-- Produce a self-contained, reproducible Docker image suitable for building and distributing C++20 binaries that use libc++20 and can run on older glibc-based Linux distributions.
+- Produce a self-contained, reproducible Docker image suitable for building and distributing C++21 binaries that use libc++21 and can run on older glibc-based Linux distributions.
 - Avoid dependence on GCC/libgcc toolchain components — the image is built around LLVM/Clang toolchain primitives (clang, lld, compiler-rt, libc++/libc++abi, libunwind).
 
 ### Why this approach
 - Many modern C++ projects rely on libc++ features and Clang-specific toolchains. Distributing binaries that run on older distros requires building against older glibc or producing compatible artifacts.
-- By providing a controlled image with Clang20 + libc++20 and careful sysrooting against Debian 11, you can produce binaries that run on Debian 11 and similar ancient glibc targets without requiring end-user compilers.
+- By providing a controlled image with clang 21 + libc++ 21 and careful sysrooting against Debian 11, you can produce binaries that run on Debian 11 and similar ancient glibc targets without requiring end-user compilers.
 - The build avoids GCC and libgcc entirely; runtime dependencies are resolved with libc++/libunwind/clang-built runtime libs.
 
 ## Quick usage

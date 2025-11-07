@@ -17,7 +17,6 @@ run_script() {
     -DCMAKE_TOOLCHAIN_FILE=/toolchains/$TARGET.toolchain \
   
   make
-  file ./test
   chroot /sysroots/$TARGET /test-build/test
   rm -rf /test-build
 }

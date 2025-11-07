@@ -10,7 +10,7 @@ run_script() {
   TARGET_TRIPLE=$1
   CLANG_DIR_NAME=`echo $TARGET_TRIPLE | sed 's/-linux-gnu/-unknown-linux-gnu/g'`
   
-  CLANG_LIBRARY_DIR=/usr/lib/llvm-20/lib/clang/20/lib/$CLANG_DIR_NAME
+  CLANG_LIBRARY_DIR=/usr/lib/llvm-21/lib/clang/21/lib/$CLANG_DIR_NAME
   SRC_DIR=/sysroots/$TARGET_TRIPLE/usr/lib/linux
   
   mkdir -p $CLANG_LIBRARY_DIR

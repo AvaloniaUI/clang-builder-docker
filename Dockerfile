@@ -18,13 +18,20 @@ COPY scripts/stretch.sources.list /etc/apt/sources.list
 RUN apt-get update && apt-get install -y --no-install-recommends libfontconfig-dev libc6-dev symlinks pax-utils && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 RUN symlinks -cr /
 
-# ====== Fix symlinks in sysroots and build static libc++ and friends =======
-FROM silkeh/clang:20-bookworm AS build-base
-RUN apt-get update && apt-get install -y symlinks ninja-build zlib1g-dev libzstd-dev libxml2-dev libcurl4-openssl-dev libclang-20-dev && rm -rf /var/cache/apt/archives /var/lib/apt/lists/* 
+# Container with LLVM toolchain
+FROM  debian:bookworm-20251103 AS llvm-base
+RUN apt-get update && apt-get install --no-install-recommends -y wget symlinks ninja-build cmake git ninja-build pax-utils strace make  gnupg software-properties-common && rm -rf /var/cache/apt/archives /var/lib/apt/lists/* 
+RUN wget --no-check-certificate https://apt.llvm.org/llvm.sh -O /tmp/llvm.sh && chmod +x /tmp/llvm.sh && /tmp/llvm.sh 21 all && rm /tmp/llvm.sh && rm -rf /var/cache/apt/archives /var/lib/apt/lists/* 
 
+RUN bash -c 'set -x; ls /usr/bin/*|grep 21$|while read bin; do ln -s $bin ${bin%-21}; done;'
+
+# Container with extra stuff required for building libc++/unwind/compiler-rt
+FROM llvm-base AS build-base
+
+RUN apt-get update && apt-get install -y zlib1g-dev libzstd-dev libxml2-dev libcurl4-openssl-dev && rm -rf /var/cache/apt/archives /var/lib/apt/lists/* 
 COPY llvm-project /src/llvm
 
-RUN rm /usr/bin/ld && ln -s /usr/bin/ld.lld /usr/bin/ld
+RUN rm -f /usr/bin/ld && ln -s /usr/bin/ld.lld /usr/bin/ld
 
 COPY scripts /scripts
 COPY toolchains /toolchains
@@ -43,9 +50,7 @@ RUN /scripts/build-sysroot.sh x86_64-linux-gnu
 
 # ======= Final image =======
 
-FROM silkeh/clang:20-bookworm
-
-RUN apt-get update && apt-get install -y --no-install-recommends git ninja-build pax-utils strace && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
+FROM llvm-base
 
 # glibc x86_64
 COPY --from=build-x86_64 /sysroots/x86_64-linux-gnu /sysroots/x86_64-linux-gnu
