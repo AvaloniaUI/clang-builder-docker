@@ -45,21 +45,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository_owner }}/clang-cross-builder
-          tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/clang-cross-builder:build_${{ github.run_number }}_${{ github.sha }}
+            ghcr.io/${{ github.repository_owner }}/clang-cross-builder:sha-${{ github.sha }}
+            ${{ github.ref == 'refs/heads/master' && format('ghcr.io/{0}/clang-cross-builder:latest', github.repository_owner) || '' }}
+
+      - name: Extract toolchain
+        run: |
+          mkdir -p toolchains
+          docker run --rm -v "$(pwd)"/clang-cross-sysroots:/host ghcr.io/${{ github.repository_owner }}/clang-cross-builder:sha-${{ github.sha }} /scripts/extract-toolchain.sh
+          tar -czf clang-cross-sysroots.tar.gz clang-cross-sysroots
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: build_${{ github.run_number }}_${{ github.sha }}
+          name: build_${{ github.run_number }}_${{ github.sha }}
+          draft: false
+          prerelease: false
+          files: clang-cross-sysroots.tar.gz       
