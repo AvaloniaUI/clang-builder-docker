@@ -51,14 +51,14 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/clang-cross-builder:build_${{ github.run_number }}_${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/clang-cross-builder:sha-${{ github.sha }}
-            ${{ github.ref == 'refs/heads/master' && format('ghcr.io/{0}/clang-cross-builder:latest', github.repository_owner) || '' }}
+            ghcr.io/${{ toLower(github.repository_owner) }}/clang-cross-builder:build_${{ github.run_number }}_${{ github.sha }}
+            ghcr.io/${{ toLower(github.repository_owner) }}/clang-cross-builder:sha-${{ github.sha }}
+            ${{ github.ref == 'refs/heads/master' && format('ghcr.io/{0}/clang-cross-builder:latest', toLower(github.repository_owner)) || '' }}
 
       - name: Extract toolchain
         run: |
           mkdir -p toolchains
-          docker run --rm -v "$(pwd)"/clang-cross-sysroots:/host ghcr.io/${{ github.repository_owner }}/clang-cross-builder:sha-${{ github.sha }} /scripts/extract-toolchain.sh
+          docker run --rm -v "$(pwd)"/clang-cross-sysroots:/host ghcr.io/${{ toLower(github.repository_owner) }}/clang-cross-builder:sha-${{ github.sha }} /scripts/extract-toolchain.sh
           tar -czf clang-cross-sysroots.tar.gz clang-cross-sysroots
 
       - name: Create Release
@@ -68,4 +68,4 @@ jobs:
           name: build_${{ github.run_number }}_${{ github.sha }}
           draft: false
           prerelease: false
-          files: clang-cross-sysroots.tar.gz       
+          files: clang-cross-sysroots.tar.gz
